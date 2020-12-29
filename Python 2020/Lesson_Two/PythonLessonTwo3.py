@@ -1,7 +1,8 @@
 #object oriented programming with classes
 
-from PythonLessonTwoExtraExtraExtra import Dog
-from PythonLessonTwoExtraExtraExtraExtra import Car
+from PythonLessonTwo2 import Dog
+from PythonLessonTwo4 import Car
+from PythonLessonThreeAliens import Electric_Car
 #create a dog
 
 my_dog = Dog("willie", 6)
@@ -44,3 +45,8 @@ my_new_car.update_odometer(13)
 my_new_car.read_odometer()
 
 my_new_car.fill_gas_tank()
+
+#inheritance or create a child class
+my_tesla = ElectricCar("tesla", "roadster", "2020")
+
+my_tesla.describe_battery()
