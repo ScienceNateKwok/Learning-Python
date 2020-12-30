@@ -13,7 +13,7 @@ class Settings:
         self.bg_color = (170, 170, 170)
 
         #scattergun settings
-        self.scattergun_speed = 3
+        self.scattergun_speed = 1.5
 
         #bullet settings
         self.bullet_speed = 3.5

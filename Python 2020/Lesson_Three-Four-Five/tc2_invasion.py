@@ -9,7 +9,7 @@ from tc2scattergun import Scattergun
 from tc2bullet import Bullet
 from tc2agent import Agent
 
-print("Welcome to TC2 Invasion")
+print("Welcome to TC2 Invasion. Press 'esc' to quit.")
 
 class TC2Invasion:
 
@@ -73,31 +73,42 @@ class TC2Invasion:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self._check_mousebutton_events(event)
                 
     def _check_keydown_events(self,event):
 
         """Respond to keypresses. """
-        if event.key == pygame.K_RIGHT:
+
+        LEFT = 1
+
+        if event.key == pygame.K_d:
             self.scattergun.moving_right = True
-        elif event.key == pygame.K_LEFT:
+        elif event.key == pygame.K_a:
             self.scattergun.moving_left = True
-        elif event.key == pygame.K_q:
+        elif event.key == pygame.K_ESCAPE:
             pygame.quit()
             sys.exit()
-        elif event.key == pygame.K_SPACE:
-            self._fire_bullet()
             
     def _check_keyup_events(self, event):
 
         """Respond to key releases."""
 
-        if event.key == pygame.K_RIGHT:
+        if event.key == pygame.K_d:
             self.scattergun.moving_right = False
-        elif event.key == pygame.K_LEFT:
+        elif event.key == pygame.K_a:
             self.scattergun.moving_left = False
                     
         #move the ship to the right
         self.scattergun.rect.x += 1
+        
+    def _check_mousebutton_events(self,event):
+
+        """Respond to mouse click. """
+
+
+        if event.button == 1:
+            self._fire_bullet()
         
     def _fire_bullet(self):
 
@@ -125,10 +136,42 @@ class TC2Invasion:
 
         """Create a fleet of agents."""
 
-        #make an agent
+        #create an agent and find the number of agents in a row
+
+        #spacing between each alien is equal to one alien width
 
         agent = Agent(self)
+        agent_width, agent_height = agent.rect.size
+        available_space_x = self.settings.screen_width - (2 * agent_width)
+        number_agents_x = available_space_x // (2 * agent_width)
+
+        #determine the number of rows of aliens that fit on the screen.
+        scattergun_height = self.scattergun.rect.height
+        available_space_y = (self.settings.screen_height -
+                             (3 * agent_height) - scattergun_height)
+        number_rows = available_space_y // (2 * agent_height)
+
+        #create the full fleet of agents
+        
+        for row_number in range(number_rows):
+            for agent_number in range(number_agents_x):
+                self._create_agent(agent_number, row_number)
+    
+
+    def _create_agent(self, agent_number, row_number):
+            
+        #create an agent and place it in the row
+        agent = Agent(self)
+        agent_width, agent_height = agent.rect.size
+        agent.x = agent_width + 2 * agent_width * agent_number
+        agent.rect.x = agent.x
+        agent.rect.y = agent.rect.height + 2 * agent.rect.height * row_number
         self.agents.add(agent)
+
+        
+        
+
+        
 
 
 if  __name__ == '__main__':
